@@ -15,5 +15,5 @@ CMake can do everything XCode can, but it easier to read the XCode's XML format,
 - Run `build-sim64.sh` will build your build system and app for x86_64 simulators. In other words, simulators on 64 bit Macs.
 - Open `_builds/your_project.xcodeproj` for a full integrated XCode environment. Build and run as you ever would.
 - Currently builds an iPhone-only target. To build an iPhone/iPad target, change the value of `XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY` on line 114 of `CMakeLists.txt` to `"1,2"`
-- Feel free to delete _builds as frequently as possible. The idea is it can be regenerated at any time.
+- Feel free to `rm -rf _builds` frequently and at will. The idea is it can be regenerated at any time.
 
