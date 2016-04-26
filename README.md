@@ -15,4 +15,4 @@ CMake can do everything XCode can, but it easier to read the XCode's XML format,
 - open `_builds/your_project.xcodeproj` for a full integrated XCode environment. Build and run as you ever would.
 - currently builds an iPhone-only target. To build an iPhone/iPad target, change the value of `XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY` on line 114 of `CMakeLists.txt` to `"1,2"`
 
-Happy hacking
+
