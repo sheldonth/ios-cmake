@@ -1,4 +1,4 @@
-# [CMake](http://cmake.com) Build Configuration for iOS
+# CMake Build Configuration for iOS
 
 This is a blank single-view-controller iOS app which uses CMake to create an XCode-friendly out-of-source build system. Instead of maintaining a `.xcodeproj` file, you instead maintain the CMakeLists.txt at the root of this directory to configure the build system for your iOS app.
 
