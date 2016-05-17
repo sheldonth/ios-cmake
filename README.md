@@ -2,7 +2,7 @@
 
 This is a blank single-view-controller iOS app which uses CMake to create an XCode-friendly out-of-source build system. Instead of maintaining a `.xcodeproj` file, you instead maintain the CMakeLists.txt at the root of this directory to configure the build system for your iOS app.
 
-CMake can do everything XCode can; eg build targets (armv7, x64-64, etc) but it easier to maintain with source control since the entire configuration is CMake style config code rather than XCode's backing XML.
+CMake can do everything XCode can; eg build targets, and dynamic/static libs (armv7, x64-64, etc) but it easier to maintain with source control since the entire configuration is CMake style config code rather than XCode's backing XML.
 
 # To Use:
 - Open `CMakeLists.txt`
