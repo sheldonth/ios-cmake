@@ -105,8 +105,11 @@ target_link_libraries(${APP_NAME} ${SECURITY})
 target_link_libraries(${APP_NAME} ${AVFOUNDATION})
 target_link_libraries(${APP_NAME} ${AUDIOTOOLBOX})
 target_link_libraries(${APP_NAME} libicucore.dylib)
-target_link_libraries(${APP_NAME} c++)
 target_link_libraries(${APP_NAME} ${ACCELERATE})
+
+# Link in the cpp standard library
+target_link_libraries(${APP_NAME} c++)
+
 
 # Set the C++ library to the the standard library
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fobjc-arc -stdlib=libstdc++ -isysroot ${CMAKE_OSX_SYSROOT}")
