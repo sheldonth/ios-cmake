@@ -8,7 +8,7 @@ CMake can do everything XCode can; eg build targets, and dynamic/static libs (ar
 - Open `CMakeLists.txt`
   - Replace `your_project` on line 3 with your project name
   - Replace`com.yourcompany.yourprovisioning` on lines 23, 24, 25 with your bundle identifier
-  - NOTE: the build will fail if you don't have provisioning profiles for that bundle identifier. It uses the `set(CODESIGNIDENTITY "iPhone Developer")` identity to use the default certificate for the bundle identifier.
+  - NOTE: the build will fail if you don't have provisioning profiles for that bundle identifier. It uses the `set(CODESIGNIDENTITY "iPhone Developer")` identity to use the default certificate for the bundle identifier you set above.
 - Install CMake with `brew install cmake` Requires version 3.3.2 or later.
 - You can configure `plist.in` as desired. The defaults will work.
 
