@@ -59,24 +59,30 @@ add_executable(
     ${RESOURCES}
 )
 
+# To enable bitcode:
 # set_target_properties(${APP_NAME} PROPERTIES XCODE_ATTRIBUTE_ENABLE_BITCODE "NO")
 
+# To link a .framework framework from the filesystem
 # target_link_libraries(${APP_NAME} 
   # ${PROJECT_SOURCE_DIR}/Torch.framework
 # )
 
+# Include headers to they're available as #import <Header/Header.h> from a framework
 # target_include_directories(${APP_NAME}
   # PUBLIC ${PROJECT_SOURCE_DIR}/Torch.framework/Headers
 # )
 
+# Link a static library
 # target_link_libraries(${APP_NAME} 
 #   ${PROJECT_SOURCE_DIR}/framework/lib/libtorch.a
 # )
 
+# Include a source directory outside a framework
 # target_include_directories(${APP_NAME}
 #   PUBLIC ${PROJECT_SOURCE_DIR}/framework/include
 # )
 
+# Locate system libraries on iOS
 find_library(UIKIT UIKit)
 find_library(FOUNDATION Foundation)
 find_library(COREGRAPHICS CoreGraphics)
@@ -87,6 +93,8 @@ find_library(SECURITY Security)
 find_library(AVFOUNDATION AVFoundation)
 find_library(AUDIOTOOLBOX AudioToolbox)
 find_library(ACCELERATE Accelerate)
+
+# link the libraries loaded above
 target_link_libraries(${APP_NAME} ${UIKIT})
 target_link_libraries(${APP_NAME} ${FOUNDATION})
 target_link_libraries(${APP_NAME} ${COREGRAPHICS})
@@ -100,9 +108,12 @@ target_link_libraries(${APP_NAME} libicucore.dylib)
 target_link_libraries(${APP_NAME} c++)
 target_link_libraries(${APP_NAME} ${ACCELERATE})
 
+# Set the C++ library to the the standard library
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fobjc-arc -stdlib=libstdc++ -isysroot ${CMAKE_OSX_SYSROOT}")
+# Turn on ARC
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fobjc-arc -stdlib=libstdc++ -isysroot ${CMAKE_OSX_SYSROOT}")
 
+# Create the app target
 set_target_properties(${APP_NAME} PROPERTIES
                       XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym"
                       XCODE_ATTRIBUTE_GCC_PREFIX_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/Prefix.pch"
