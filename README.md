@@ -1,8 +1,8 @@
 # CMake Build Configuration for iOS
 
-This is a blank single-view-controller iOS app which uses CMake to create an XCode-friendly out-of-source build system. Instead of maintaining a `.xcodeproj` file, you instead maintain the CMakeLists.txt at the root of this directory to configure the build system for your iOS app.
+This is a blank single-view-controller iOS app which uses CMake to create an XCode-friendly out-of-source build system. Instead of configuring the build system through an `.xcodeproj` file, you instead maintain the CMakeLists.txt at the root of this directory.
 
-CMake can do everything XCode can; eg build targets, and dynamic/static libs (armv7, x64-64, etc) but it easier to maintain with source control since the entire configuration is CMake style config code rather than XCode's backing XML.
+CMake can do everything XCode can; eg build targets, and dynamic or static libraries (armv7, x64-64, ...) but it easier to maintain the cmake description file. This file is the only build configuration in source control. This is in contrast to committing the `.xcodeproj` directory which includes the backing XML, which is nonsensically hard to edit by hand.
 
 # To Use:
 - Open `CMakeLists.txt`
