@@ -6,9 +6,9 @@ This CMake project can do everything XCode can; eg build executables & libraries
 
 # To Use:
 - Open `CMakeLists.txt`
-  - Set `APP_NAME` on line 3 with your project name
-  - Set `YOURAPP` on line 19 with your app name
-  - Set `BUNDLE_IDENTIFIER` on lines 20 to your bundle identifier
+  - Set `your_project` on line 3 with your project name
+  - Set `YOURAPP` on line 19 with your app's name
+  - Set `BUNDLE_IDENTIFIER` on lines 20 to your app's bundle identifier
   - NOTE: the build will fail if you don't have provisioning profiles for that bundle identifier. It uses the `set(CODESIGNIDENTITY "iPhone Developer")` identity to use the default certificate for the bundle identifier you just set.
 - Install CMake with `brew install cmake` Requires version 3.3.2 or later.
 - You can configure `plist.in` as desired. The defaults will work.
