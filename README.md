@@ -23,10 +23,10 @@ This CMake project can do everything Xcode can; eg build the executable app & th
 - Run `open build.sim64/project.xcodeproj`
 
 ### iPhone/iPad
-- Currently builds an iPhone-only target. To build an iPhone/iPad target, change the value of `XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY` on line 114 of `CMakeLists.txt` to `"1,2"`
-- Feel free to `rm -rf _builds` frequently and at will. It can be regenerated at any time.
+- The app target builds to iPhone device family. To build an iPhone/iPad target, change the value of `XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY` on line 114 of `CMakeLists.txt` to `"1,2"`
 
 ### Framework
-- Builds a dynamically linked iOS Framework for the architectures relevant to the platform from c++ code in `/cppframework`
+- Builds a dynamically linked iOS Framework for the architectures relevant to the platform
 - Sets the install name and rpath to the correct values for iOS
-- Copies the framework into the build
+- Copies the framework into the bundle of the app build as a post packaging step
+- The same process can be done to any dynamically linked framework on disk
