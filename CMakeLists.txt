@@ -1,35 +1,30 @@
-cmake_minimum_required (VERSION 3.3.2)
+cmake_minimum_required (VERSION 3.7)
 
-project(your_project)
+set(DEVELOPMENT_PROJECT_NAME "project")                     # <== Set to your project name, e.g. project.xcodeproj
+set(DEVELOPMENT_TEAM_ID "AAAAAAAAAA")                       # <== Set to your team ID from Apple
+set(APP_NAME "YOURAPP")                                     # <== Set To Your app's name
+set(APP_BUNDLE_IDENTIFIER "com.company.app")                # <== Set to your app's bundle identifier
+set(FRAMEWORK_NAME "FooBar")                                # <== Set to your framework's name
+set(FRAMEWORK_BUNDLE_IDENTIFIER "com.company.framework")    # <== Set to your framework's bundle ID
+set(CODESIGNIDENTITY "iPhone Developer")                    # <== Set to your preferred code sign identity, to see list:
+                                                            # /usr/bin/env xcrun security find-identity -v -p codesigning
+set(DEPLOYMENT_TARGET 8.0)                                  # <== Set your deployment target version of iOS
 
+project(${DEVELOPMENT_PROJECT_NAME})
 include(BundleUtilities)
 
-set(CODESIGNIDENTITY "iPhone Developer")
-set(DEPLOYMENT_TARGET 8.0)
-
-macro(set_xcode_property TARGET XCODE_PROPERTY XCODE_VALUE)
-  set_property(TARGET ${TARGET} PROPERTY XCODE_ATTRIBUTE_${XCODE_PROPERTY} ${XCODE_VALUE})
-endmacro(set_xcode_property)
-
-MACRO(COPY_TO_BUNDLE resourcePath bundlePath)
-    LIST(APPEND BUNDLE_COPY_RESOURCES ${resourcePath})
-    SET_SOURCE_FILES_PROPERTIES(${resourcePath} PROPERTIES MACOSX_PACKAGE_LOCATION ${bundlePath})
-ENDMACRO(COPY_TO_BUNDLE)
-
-set(APP_NAME "YOURAPP")
-set(BUNDLE_IDENTIFIER "com.company.yourcompany")
 set(PRODUCT_NAME ${APP_NAME})
 set(EXECUTABLE_NAME ${APP_NAME})
 set(MACOSX_BUNDLE_EXECUTABLE_NAME ${APP_NAME})
-set(MACOSX_BUNDLE_INFO_STRING ${BUNDLE_IDENTIFIER})
-set(MACOSX_BUNDLE_GUI_IDENTIFIER ${BUNDLE_IDENTIFIER})
-set(MACOSX_BUNDLE_BUNDLE_NAME ${BUNDLE_IDENTIFIER})
+set(MACOSX_BUNDLE_INFO_STRING ${APP_BUNDLE_IDENTIFIER})
+set(MACOSX_BUNDLE_GUI_IDENTIFIER ${APP_BUNDLE_IDENTIFIER})
+set(MACOSX_BUNDLE_BUNDLE_NAME ${APP_BUNDLE_IDENTIFIER})
 set(MACOSX_BUNDLE_ICON_FILE "")
 set(MACOSX_BUNDLE_LONG_VERSION_STRING "1.0")
 set(MACOSX_BUNDLE_SHORT_VERSION_STRING "1.0")
 set(MACOSX_BUNDLE_BUNDLE_VERSION "1.0")
 set(MACOSX_BUNDLE_COPYRIGHT "Copyright YOU")
-set(MACOSX_DEPLOYMENT_TARGET "8.0")
+set(MACOSX_DEPLOYMENT_TARGET ${DEPLOYMENT_TARGET})
 
 set(APP_HEADER_FILES
   ./AppDelegate.h
@@ -63,20 +58,25 @@ add_executable(
 # To enable bitcode:
 # set_target_properties(${APP_NAME} PROPERTIES XCODE_ATTRIBUTE_ENABLE_BITCODE "NO")
 
-# To link a .framework framework from the filesystem
+# To link a statically linked Framework from the filesystem:
+# Note: dynamic frameworks require copying to the app bundle. Statically linked are copying into the executable.
 # target_link_libraries(${APP_NAME} 
   # ${PROJECT_SOURCE_DIR}/Torch.framework
 # )
 
+
+# Include the same headers for the statically linked framework:
 # Include headers to they're available as #import <Header/Header.h> from a framework
 # target_include_directories(${APP_NAME}
   # PUBLIC ${PROJECT_SOURCE_DIR}/Torch.framework/Headers
 # )
 
-# Link a static library
+
+# Static Link a library archive into the executable
 # target_link_libraries(${APP_NAME} 
 #   ${PROJECT_SOURCE_DIR}/framework/lib/libtorch.a
 # )
+
 
 # Include a source directory outside a framework
 # target_include_directories(${APP_NAME}
@@ -86,36 +86,25 @@ add_executable(
 # Locate system libraries on iOS
 find_library(UIKIT UIKit)
 find_library(FOUNDATION Foundation)
-find_library(COREGRAPHICS CoreGraphics)
 find_library(MOBILECORESERVICES MobileCoreServices)
 find_library(CFNETWORK CFNetwork)
 find_library(SYSTEMCONFIGURATION SystemConfiguration)
-find_library(SECURITY Security)
-find_library(AVFOUNDATION AVFoundation)
-find_library(AUDIOTOOLBOX AudioToolbox)
-find_library(ACCELERATE Accelerate)
 
-# link the libraries loaded above
+
+# link the frameworks located above
 target_link_libraries(${APP_NAME} ${UIKIT})
 target_link_libraries(${APP_NAME} ${FOUNDATION})
-target_link_libraries(${APP_NAME} ${COREGRAPHICS})
 target_link_libraries(${APP_NAME} ${MOBILECORESERVICES})
 target_link_libraries(${APP_NAME} ${CFNETWORK})
 target_link_libraries(${APP_NAME} ${SYSTEMCONFIGURATION})
-target_link_libraries(${APP_NAME} ${SECURITY})
-target_link_libraries(${APP_NAME} ${AVFOUNDATION})
-target_link_libraries(${APP_NAME} ${AUDIOTOOLBOX})
-target_link_libraries(${APP_NAME} libicucore.dylib)
-target_link_libraries(${APP_NAME} ${ACCELERATE})
 
 # Link in the cpp standard library
 target_link_libraries(${APP_NAME} c++)
 
-
 # Set the C++ library to the the standard library
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fobjc-arc -stdlib=libstdc++ -isysroot ${CMAKE_OSX_SYSROOT}")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fobjc-arc -stdlib=libstdc++")
 # Turn on ARC
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fobjc-arc -stdlib=libstdc++ -isysroot ${CMAKE_OSX_SYSROOT}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fobjc-arc -stdlib=libstdc++")
 
 # Create the app target
 set_target_properties(${APP_NAME} PROPERTIES
@@ -125,8 +114,48 @@ set_target_properties(${APP_NAME} PROPERTIES
                       XCODE_ATTRIBUTE_GCC_PRECOMPILE_PREFIX_HEADER "YES"
                       XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET ${DEPLOYMENT_TARGET}
                       XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ${CODESIGNIDENTITY}
+                      XCODE_ATTRIBUTE_DEVELOPMENT_TEAM ${DEVELOPMENT_TEAM_ID}
                       MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/plist.in
                       XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1"
                       XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC YES
                       XCODE_ATTRIBUTE_COMBINE_HIDPI_IMAGES "NO")
+                      
+# Build the C++ dynamically linked framework
+add_subdirectory(cppframework)
+
+# Link the app to it
+target_link_libraries(${APP_NAME} ${FRAMEWORK_NAME})
+
+# Set the app's linker search path to the default location on iOS
+set_target_properties(
+    ${APP_NAME}
+    PROPERTIES
+    XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS
+    "@executable_path/Frameworks")
+
+# Create Frameworks directory in app bundle
+add_custom_command(
+    TARGET
+    ${APP_NAME}
+    POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory
+    ${PROJECT_BINARY_DIR}/$<CONFIG>${CMAKE_XCODE_EFFECTIVE_PLATFORMS}/${APP_NAME}.app/Frameworks
+)
+
+# Copy the framework into the bundle
+add_custom_command(
+    TARGET
+    ${APP_NAME}
+    POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${PROJECT_BINARY_DIR}/cppframework/$<CONFIG>${CMAKE_XCODE_EFFECTIVE_PLATFORMS}/
+    ${PROJECT_BINARY_DIR}/$<CONFIG>${CMAKE_XCODE_EFFECTIVE_PLATFORMS}/${APP_NAME}.app/Frameworks
+)
+
+# Codesign the framework in it's new spot
+add_custom_command(
+    TARGET
+    ${APP_NAME}
+    POST_BUILD COMMAND codesign --force --verbose
+    ${PROJECT_BINARY_DIR}/$<CONFIG>${CMAKE_XCODE_EFFECTIVE_PLATFORMS}/${APP_NAME}.app/Frameworks/${FRAMEWORK_NAME}.framework
+    --sign \"iPhone Developer\"
+)
 

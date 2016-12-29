@@ -1,1 +1,3 @@
-_builds
+build.ios
+build.sim
+build.sim64
