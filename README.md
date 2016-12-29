@@ -27,6 +27,6 @@ This CMake project can do everything Xcode can; eg build the executable app & th
 
 ### Framework
 - Builds a dynamically linked iOS framework for the architectures relevant to the platform
-- Sets the install name and rpath to the correct values for iOS
+- Sets the install name and rpath to the correct values for iOS packaging
 - Copies the framework into the bundle of the app build as a post packaging step
 - The same process can be done to any dynamically linked framework on disk
