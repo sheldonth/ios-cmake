@@ -12,15 +12,15 @@ This CMake project can do everything Xcode can; eg build the executable app & th
 
 ### Create Xcode project for Devices (armv7, armv7s, arm64)
 - Run `build-ios.sh` to generate the build system in `build.ios/`
-- Run `open build.ios/project.xcodeproj` to edit in Xcode
+- Run `open build.ios/project.xcodeproj`
 
 ### Create Xcode project for Simulator 32-bit (i386)
-- Run `build-sim.sh` to build the build system in `build.sim`
-- Run `open build.sim/project.xcodeproj` to edit the app in iOS. Only simulator targets on a 32 bit Mac will be present
+- Run `build-sim.sh` to build the build system in `build.sim/`
+- Run `open build.sim/project.xcodeproj`
 
 ### Create Xcode project for Simulator 64-bit (x86_64)
 - Run `build-sim64.sh` 
-- Same as above
+- Run `open build.sim64/project.xcodeproj`
 
 ### iPhone/iPad
 - Currently builds an iPhone-only target. To build an iPhone/iPad target, change the value of `XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY` on line 114 of `CMakeLists.txt` to `"1,2"`
