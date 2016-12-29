@@ -55,11 +55,11 @@ add_executable(
     ${RESOURCES}
 )
 
-# To enable bitcode:
+# To disable bitcode:
 # set_target_properties(${APP_NAME} PROPERTIES XCODE_ATTRIBUTE_ENABLE_BITCODE "NO")
 
 # To link a statically linked Framework from the filesystem:
-# Note: dynamic frameworks require copying to the app bundle. Statically linked are copying into the executable.
+# Note: dynamic frameworks require copying to the app bundle. Statically linked are copied into the executable itself.
 # target_link_libraries(${APP_NAME} 
   # ${PROJECT_SOURCE_DIR}/Torch.framework
 # )
