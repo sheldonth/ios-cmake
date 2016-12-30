@@ -2,7 +2,7 @@
 
 This is a blank single-view-controller iOS app and C++ dynamically linked library which use CMake to create an Xcode-friendly out-of-source build system. Instead of configuring the build system through an `.xcodeproj` file, you instead maintain a set of `CMakeLists.txt` files describing the build system.
 
-This CMake project can do everything Xcode can; eg build the executable app & the C++ library in `cppframework`. The app is in Objective-C and the framework in C++. The build systems, generated into `build.ios` `build.sim` `build.sim64` are gitignored. CMakeLists.txt file is the only build configuration kept in source control. This is in contrast to committing the `.xcodeproj` directory which includes the backing XML, which is nonsensically hard to edit by hand.
+This CMake project can do everything Xcode can; eg build the executable app & the C++ library in `cppframework`. The build systems, generated into `build.ios` `build.sim` `build.sim64` are gitignored. CMakeLists.txt file is the only build configuration kept in source control. This is in contrast to committing the `.xcodeproj` directory which includes the backing XML, which is nonsensically hard to edit by hand.
 
 # To Use:
 - Open `CMakeLists.txt`
