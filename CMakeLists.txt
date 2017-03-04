@@ -29,12 +29,14 @@ set(MACOSX_DEPLOYMENT_TARGET ${DEPLOYMENT_TARGET})
 set(APP_HEADER_FILES
   ./AppDelegate.h
   ./ViewController.h
+  ./CppInterface.h
   ./Prefix.pch
 )
 
 set(APP_SOURCE_FILES
   ./AppDelegate.m
   ./ViewController.m
+  ./CppInterface.mm
   ./main.m
 )
 
@@ -42,10 +44,6 @@ set(RESOURCES
   ./Main.storyboard
   ./LaunchScreen.storyboard
 )
-
-
-MESSAGE(STATUS ${PROJECT_SOURCE_DIR})
-MESSAGE(STATUS ${APP_SOURCE_FILES})
 
 add_executable(
     ${APP_NAME}
@@ -83,6 +81,10 @@ add_executable(
 #   PUBLIC ${PROJECT_SOURCE_DIR}/framework/include
 # )
 
+# Build the C++ dynamically linked framework
+add_subdirectory(cppframework)
+add_dependencies(${APP_NAME} ${FRAMEWORK_NAME})
+
 # Locate system libraries on iOS
 find_library(UIKIT UIKit)
 find_library(FOUNDATION Foundation)
@@ -99,12 +101,13 @@ target_link_libraries(${APP_NAME} ${CFNETWORK})
 target_link_libraries(${APP_NAME} ${SYSTEMCONFIGURATION})
 
 # Link in the cpp standard library
-target_link_libraries(${APP_NAME} c++)
+# target_link_libraries(${APP_NAME} c++)
+target_link_libraries(${APP_NAME} ${FRAMEWORK_NAME})
 
 # Set the C++ library to the the standard library
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fobjc-arc -stdlib=libstdc++")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fobjc-arc") # -stdlib=libstdc++
 # Turn on ARC
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fobjc-arc -stdlib=libstdc++")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fobjc-arc") # -stdlib=libstdc++
 
 # Create the app target
 set_target_properties(${APP_NAME} PROPERTIES
@@ -120,11 +123,12 @@ set_target_properties(${APP_NAME} PROPERTIES
                       XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC YES
                       XCODE_ATTRIBUTE_COMBINE_HIDPI_IMAGES "NO")
                       
-# Build the C++ dynamically linked framework
-add_subdirectory(cppframework)
 
-# Link the app to it
-target_link_libraries(${APP_NAME} ${FRAMEWORK_NAME})
+#include framework headers
+target_include_directories(${APP_NAME} PUBLIC 
+    "${PROJECT_BINARY_DIR}/cppframework/$<CONFIG>${CMAKE_XCODE_EFFECTIVE_PLATFORMS}/${FRAMEWORK_NAME}.framework"
+)
+
 
 # Set the app's linker search path to the default location on iOS
 set_target_properties(

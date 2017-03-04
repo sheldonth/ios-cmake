@@ -1,18 +1,16 @@
 cmake_minimum_required (VERSION 3.7)
 
-set(LIBRARY_HEADERS
-    ./Foo.h
-)
-
-set(LIBRARY_OBJECTS
-    ./Foo.cpp
+set(LIBRARY_SOURCE
+    ${CMAKE_CURRENT_LIST_DIR}/Foo.hh
+    ${CMAKE_CURRENT_LIST_DIR}/Foo.cpp
 )
 
 add_library(
     ${FRAMEWORK_NAME} SHARED
-    ${LIBRARY_HEADERS}
-    ${LIBRARY_OBJECTS}
+    ${LIBRARY_SOURCE}
 )
+
+set(CMAKE_SHARED_LINKER_FLAGS "-Wall") # -stdlib=libstdc++ 
 
 set_target_properties(${FRAMEWORK_NAME} PROPERTIES
     FRAMEWORK TRUE
@@ -23,10 +21,20 @@ set_target_properties(${FRAMEWORK_NAME} PROPERTIES
     VERSION 1.0.0
     # "compatibility version" in semantic format in Mach-O binary file
     SOVERSION 1.0.0
-    PUBLIC_HEADER "${CMAKE_CURRENT_LIST_DIR}/Foo.h"
+    PUBLIC_HEADER "${CMAKE_CURRENT_LIST_DIR}/Foo.hh"
     XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ${CODESIGNIDENTITY}
     XCODE_ATTRIBUTE_DEVELOPMENT_TEAM ${DEVELOPMENT_TEAM_ID}
 )
+
+set_xcode_property(${FRAMEWORK_NAME} IPHONEOS_DEPLOYMENT_TARGET ${DEPLOYMENT_TARGET})
+
+# target_link_libraries(${FRAMEWORK_NAME} c++)
+# target_compile_options(${FRAMEWORK_NAME} PRIVATE "-xc++")
+# set (CMAKE_SHARED_LINKER_FLAGS "-lstdc++")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++") # -Wall -Wextra -pedantic
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11") # -Wall -Wextra -pedantic
+# target_link_libraries(${FRAMEWORK_NAME} c++)
+# target_link_libraries(${FRAMEWORK_NAME} "-lstring")
 
 add_custom_command(
     TARGET ${FRAMEWORK_NAME}
