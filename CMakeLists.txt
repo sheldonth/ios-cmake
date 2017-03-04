@@ -100,14 +100,14 @@ target_link_libraries(${APP_NAME} ${MOBILECORESERVICES})
 target_link_libraries(${APP_NAME} ${CFNETWORK})
 target_link_libraries(${APP_NAME} ${SYSTEMCONFIGURATION})
 
-# Link in the cpp standard library
-# target_link_libraries(${APP_NAME} c++)
+# Link the framework to the app
 target_link_libraries(${APP_NAME} ${FRAMEWORK_NAME})
 
 # Set the C++ library to the the standard library
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fobjc-arc") # -stdlib=libstdc++
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fobjc-arc")
+
 # Turn on ARC
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fobjc-arc") # -stdlib=libstdc++
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fobjc-arc")
 
 # Create the app target
 set_target_properties(${APP_NAME} PROPERTIES

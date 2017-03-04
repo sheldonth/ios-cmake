@@ -14,7 +14,9 @@
     self = [super init];
     if (self) {
         myFoo = new Foo();
-        // myFoo->PrintFoo();
+        myFoo->PrintFoo();
+        delete myFoo;
+        myFoo = nullptr;
     }
     return self;
 }

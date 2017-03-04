@@ -6,8 +6,8 @@ class Foo
 public:
     int PrintFoo();
     std::string foo;
-    Foo() {std::cout << "Foo Created.";}
-    ~Foo() {std::cout << "Foo Destroyed.";}
+    Foo() {std::cout << "Foo Created." << std::endl;}
+    ~Foo() {std::cout << "Foo Destroyed." << std::endl;}
 private:
 };
 

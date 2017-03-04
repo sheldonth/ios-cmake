@@ -10,7 +10,7 @@ add_library(
     ${LIBRARY_SOURCE}
 )
 
-set(CMAKE_SHARED_LINKER_FLAGS "-Wall") # -stdlib=libstdc++ 
+set(CMAKE_SHARED_LINKER_FLAGS "-Wall")
 
 set_target_properties(${FRAMEWORK_NAME} PROPERTIES
     FRAMEWORK TRUE
@@ -27,14 +27,7 @@ set_target_properties(${FRAMEWORK_NAME} PROPERTIES
 )
 
 set_xcode_property(${FRAMEWORK_NAME} IPHONEOS_DEPLOYMENT_TARGET ${DEPLOYMENT_TARGET})
-
-# target_link_libraries(${FRAMEWORK_NAME} c++)
-# target_compile_options(${FRAMEWORK_NAME} PRIVATE "-xc++")
-# set (CMAKE_SHARED_LINKER_FLAGS "-lstdc++")
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++") # -Wall -Wextra -pedantic
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11") # -Wall -Wextra -pedantic
-# target_link_libraries(${FRAMEWORK_NAME} c++)
-# target_link_libraries(${FRAMEWORK_NAME} "-lstring")
+# set_target_properties(${FRAMEWORK_NAME} PROPERTIES COMPILE_FLAGS "-x c++")
 
 add_custom_command(
     TARGET ${FRAMEWORK_NAME}
