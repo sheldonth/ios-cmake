@@ -7,7 +7,10 @@
 EXPORT
 int Foo::PrintFoo()
 {
-    std::cout << "This is in a C++ in a dynamically linked framework!" << std::endl;
+#if __cplusplus
+    std::cout << "C++ environment detected." << std::endl;
+#endif
+    std::cout << "Foo::PrintFoo() called." << std::endl;
     return 1;
 } 
 
