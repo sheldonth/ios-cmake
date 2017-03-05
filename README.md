@@ -4,6 +4,8 @@ This is a blank single-view-controller iOS app and C++ dynamically linked framew
 
 This CMake project can do everything Xcode can; eg build the executable app & the C++ library in `cppframework`. The build systems, generated into `build.ios` `build.sim` `build.sim64` are gitignored. CMakeLists.txt file is the only build configuration kept in source control. This is in contrast to committing the `.xcodeproj` directory which includes the backing XML, which is nonsensically hard to edit by hand.
 
+The app instantiates a C++ object from the dynamically linked framework and calls a function on it. It subsequently deletes the C++ object pointer.
+
 # To Use:
 - Open `CMakeLists.txt`
   - Set lines 3-11 with values for your project
