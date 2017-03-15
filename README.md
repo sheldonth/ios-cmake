@@ -9,8 +9,8 @@ The app instantiates a C++ object from the dynamically linked framework and call
 ## What can this do for me?
 - Conveniently use external C/C++/Objective-C libraries built with CMake in your app. Just clone the library and add an `add_subdirectory` to build that dependent library according to it's own build system, but directly as a target in your app's build system.
 - Remove sections of your exectuable code and instead load that code just-in-time as a dynamically linked embedded framework.
-    - You can decrease the size of your executable (and thus how much data must be loaded into memory when your app starts) by bundling subsections of the code up and packaging it as an embedded framework. This won't decrease your IPA size (since the framework must still be embedded) but it will make your exectuable smaller, and therefore quicker to start. The sample app shows contains a C++ hello world in C++ but it could be any code in any C/C++/Objective-C.
-- Stop dealing with and checking into source control pesky .xcodeproj and .xcworkspace directories!
+    - You can decrease the size of your executable (and thus how much data must be loaded into memory when your app starts) by bundling subsections of the code up and packaging it as an embedded framework. This won't decrease your IPA size (since the framework must still be embedded) but it will make your executable smaller, and therefore quicker to start. If a user never runs the dynamically linked code, it stays out of memory. The sample framework code contains a C++ hello world but it could be C/C++/Objective-C.
+- Stop dealing with and checking into source control pesky .xcodeproj and .xcworkspace directories. The scripts are designed to regenerate your build system frequently.
 
 ### To Use:
 - Open `CMakeLists.txt`
