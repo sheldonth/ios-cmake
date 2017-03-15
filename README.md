@@ -6,25 +6,31 @@ This CMake project can do everything Xcode can; eg build the executable app & th
 
 The app instantiates a C++ object from the dynamically linked framework and calls a function on it. It subsequently deletes the C++ object pointer.
 
-# To Use:
+## What can this do for me?
+- Conveniantly use external C/C++/Objective-C libraries built with CMake in your app. Just clone the library and add an `add_subdirectory` to build that dependent library according to it's own build system, but directly as a target in your app's build system.
+- Remove sections of your exectuable code and instead load that code just-in-time as a dynamically linked embedded framework.
+    - You can decrease the size of your executable (and thus how much data must be loaded into memory when your app starts) by bundling subsections of the code up and packaging it as an embedded framework. This won't decrease your IPA size (since the framework must still be embedded) but it will make your exectuable smaller, and therefore quicker to start. The sample app shows contains a C++ hello world in C++ but it could be any code in any C/C++/Objective-C.
+- Stop dealing with and checking into source control pesky .xcodeproj and .xcworkspace directories!
+
+### To Use:
 - Open `CMakeLists.txt`
   - Set lines 3-11 with values for your project
   - NOTE: the build `./build-ios.sh` will fail if you don't have provisioning profiles for the current bundle identifier. It uses the `set(CODESIGNIDENTITY "iPhone Developer")` identity to use the default certificate for the current bundle identifier.
 - Requires CMake version 3.7
 
-### Create Xcode project for Devices (armv7, armv7s, arm64)
+#### Create Xcode project for Devices (armv7, armv7s, arm64)
 - Run `build-ios.sh` to generate the build system in `build.ios/`
 - Run `open build.ios/project.xcodeproj`
 
-### Create Xcode project for Simulator 32-bit (i386)
+#### Create Xcode project for Simulator 32-bit (i386)
 - Run `build-sim.sh` to build the build system in `build.sim/`
 - Run `open build.sim/project.xcodeproj`
 
-### Create Xcode project for Simulator 64-bit (x86_64)
+#### Create Xcode project for Simulator 64-bit (x86_64)
 - Run `build-sim64.sh` 
 - Run `open build.sim64/project.xcodeproj`
 
-### iPhone/iPad
+#### iPhone/iPad
 - The app target builds to iPhone device family. To build an iPhone/iPad target, change the value of `XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY` on line 114 of `CMakeLists.txt` to `"1,2"`
 
 ### Framework
