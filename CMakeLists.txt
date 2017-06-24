@@ -123,7 +123,7 @@ set_target_properties(${APP_NAME} PROPERTIES
 
 #include framework headers
 target_include_directories(${APP_NAME} PUBLIC 
-    "${PROJECT_BINARY_DIR}/cppframework/$<CONFIG>${CMAKE_XCODE_EFFECTIVE_PLATFORMS}/${FRAMEWORK_NAME}.framework"
+    "${PROJECT_BINARY_DIR}/cppframework/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/${FRAMEWORK_NAME}.framework"
 )
 
 
@@ -139,7 +139,7 @@ add_custom_command(
     TARGET
     ${APP_NAME}
     POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory
-    ${PROJECT_BINARY_DIR}/$<CONFIG>${CMAKE_XCODE_EFFECTIVE_PLATFORMS}/${APP_NAME}.app/Frameworks
+    ${PROJECT_BINARY_DIR}/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/${APP_NAME}.app/Frameworks
 )
 
 # Copy the framework into the bundle
@@ -147,8 +147,8 @@ add_custom_command(
     TARGET
     ${APP_NAME}
     POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${PROJECT_BINARY_DIR}/cppframework/$<CONFIG>${CMAKE_XCODE_EFFECTIVE_PLATFORMS}/
-    ${PROJECT_BINARY_DIR}/$<CONFIG>${CMAKE_XCODE_EFFECTIVE_PLATFORMS}/${APP_NAME}.app/Frameworks
+    ${PROJECT_BINARY_DIR}/cppframework/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/
+    ${PROJECT_BINARY_DIR}/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/${APP_NAME}.app/Frameworks
 )
 
 # Codesign the framework in it's new spot
@@ -156,7 +156,7 @@ add_custom_command(
     TARGET
     ${APP_NAME}
     POST_BUILD COMMAND codesign --force --verbose
-    ${PROJECT_BINARY_DIR}/$<CONFIG>${CMAKE_XCODE_EFFECTIVE_PLATFORMS}/${APP_NAME}.app/Frameworks/${FRAMEWORK_NAME}.framework
-    --sign \"iPhone Developer\"
+    ${PROJECT_BINARY_DIR}/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/${APP_NAME}.app/Frameworks/${FRAMEWORK_NAME}.framework
+    --sign ${CODESIGNIDENTITY}
 )
 
