@@ -6,7 +6,7 @@ set(APP_NAME "YOURAPP")                                     # <== Set To Your ap
 set(APP_BUNDLE_IDENTIFIER "com.company.app")                # <== Set to your app's bundle identifier
 set(FRAMEWORK_NAME "FooBar")                                # <== Set to your framework's name
 set(FRAMEWORK_BUNDLE_IDENTIFIER "com.company.framework")    # <== Set to your framework's bundle ID
-set(CODESIGNIDENTITY "iPhone Developer")                    # <== Set to your preferred code sign identity, to see list:
+set(CODE_SIGN_IDENTITY "iPhone Developer")                  # <== Set to your preferred code sign identity, to see list:
                                                             # /usr/bin/env xcrun security find-identity -v -p codesigning
 set(DEPLOYMENT_TARGET 8.0)                                  # <== Set your deployment target version of iOS
 
@@ -113,7 +113,7 @@ set_target_properties(${APP_NAME} PROPERTIES
                       RESOURCE "${RESOURCES}"
                       XCODE_ATTRIBUTE_GCC_PRECOMPILE_PREFIX_HEADER "YES"
                       XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET ${DEPLOYMENT_TARGET}
-                      XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ${CODESIGNIDENTITY}
+                      XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ${CODE_SIGN_IDENTITY}
                       XCODE_ATTRIBUTE_DEVELOPMENT_TEAM ${DEVELOPMENT_TEAM_ID}
                       MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/plist.in
                       XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1"
@@ -157,6 +157,6 @@ add_custom_command(
     ${APP_NAME}
     POST_BUILD COMMAND codesign --force --verbose
     ${PROJECT_BINARY_DIR}/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/${APP_NAME}.app/Frameworks/${FRAMEWORK_NAME}.framework
-    --sign ${CODESIGNIDENTITY}
+    --sign ${CODE_SIGN_IDENTITY}
 )
 
