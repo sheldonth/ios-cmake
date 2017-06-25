@@ -27,18 +27,19 @@ set_target_properties(${FRAMEWORK_NAME} PROPERTIES
 )
 
 set_xcode_property(${FRAMEWORK_NAME} IPHONEOS_DEPLOYMENT_TARGET ${DEPLOYMENT_TARGET})
+set_xcode_property(${FRAMEWORK_NAME} SKIP_INSTALL "YES")
 # set_target_properties(${FRAMEWORK_NAME} PROPERTIES COMPILE_FLAGS "-x c++")
 
 add_custom_command(
     TARGET ${FRAMEWORK_NAME}
     POST_BUILD
-    COMMAND /bin/bash -c "${CMAKE_CURRENT_LIST_DIR}/install_name.sh $<TARGET_FILE:${FRAMEWORK_NAME}>"
+    COMMAND /bin/bash -c "${CMAKE_CURRENT_LIST_DIR}/install_name.sh \${BUILT_PRODUCTS_DIR}/\${PRODUCT_NAME}.framework/\${PRODUCT_NAME}"
 )
 
 add_custom_command(
     TARGET ${FRAMEWORK_NAME}
     POST_BUILD
-    COMMAND install_name_tool -id \"@rpath/${FRAMEWORK_NAME}.framework/${FRAMEWORK_NAME}\"
-    $<TARGET_FILE:${FRAMEWORK_NAME}>
+    COMMAND install_name_tool -id \"@rpath/\${PRODUCT_NAME}.framework/\${PRODUCT_NAME}\"
+    \${BUILT_PRODUCTS_DIR}/\${PRODUCT_NAME}.framework/\${PRODUCT_NAME}
 )
 
