@@ -92,7 +92,6 @@ find_library(MOBILECORESERVICES MobileCoreServices)
 find_library(CFNETWORK CFNetwork)
 find_library(SYSTEMCONFIGURATION SystemConfiguration)
 
-
 # link the frameworks located above
 target_link_libraries(${APP_NAME} ${UIKIT})
 target_link_libraries(${APP_NAME} ${FOUNDATION})
@@ -101,7 +100,8 @@ target_link_libraries(${APP_NAME} ${CFNETWORK})
 target_link_libraries(${APP_NAME} ${SYSTEMCONFIGURATION})
 
 # Link the framework to the app
-target_link_libraries(${APP_NAME} ${FRAMEWORK_NAME})
+set_target_properties(${APP_NAME} PROPERTIES
+                      XCODE_ATTRIBUTE_OTHER_LDFLAGS "${XCODE_ATTRIBUTE_OTHER_LDFLAGS} -framework ${FRAMEWORK_NAME}")
 
 # Turn on ARC
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fobjc-arc")
@@ -118,45 +118,97 @@ set_target_properties(${APP_NAME} PROPERTIES
                       MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/plist.in
                       XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1"
                       XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC YES
-                      XCODE_ATTRIBUTE_COMBINE_HIDPI_IMAGES "NO")
-                      
+                      XCODE_ATTRIBUTE_COMBINE_HIDPI_IMAGES "NO"
+                      XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)")
 
-#include framework headers
+# Include framework headers, needed to make "Build" Xcode action work.
+# "Archive" works fine just relying on default search paths as it has different
+# build product output directory.
 target_include_directories(${APP_NAME} PUBLIC 
     "${PROJECT_BINARY_DIR}/cppframework/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/${FRAMEWORK_NAME}.framework"
 )
-
 
 # Set the app's linker search path to the default location on iOS
 set_target_properties(
     ${APP_NAME}
     PROPERTIES
     XCODE_ATTRIBUTE_LD_RUNPATH_SEARCH_PATHS
-    "@executable_path/Frameworks")
+    "@executable_path/Frameworks"
+)
+
+# Note that commands below are indented just for readability. They will endup as
+# one liners after processing and unescaped ; will disappear so \; are needed.
+# First condition in each command is for normal build, second for archive.
+# \&\>/dev/null makes sure that failure of one command and success of other
+# is not printed and does not make Xcode complain that /bin/sh failed and build
+# continued.
 
 # Create Frameworks directory in app bundle
 add_custom_command(
     TARGET
     ${APP_NAME}
-    POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory
-    ${PROJECT_BINARY_DIR}/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/${APP_NAME}.app/Frameworks
+    POST_BUILD COMMAND /bin/sh -c
+    \"COMMAND_DONE=0 \;
+    if ${CMAKE_COMMAND} -E make_directory
+        ${PROJECT_BINARY_DIR}/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/${APP_NAME}.app/Frameworks
+        \&\>/dev/null \; then
+        COMMAND_DONE=1 \;
+    fi \;
+    if ${CMAKE_COMMAND} -E make_directory
+        \${BUILT_PRODUCTS_DIR}/${APP_NAME}.app/Frameworks
+        \&\>/dev/null \; then
+        COMMAND_DONE=1 \;
+    fi \;
+    if [ \\$$COMMAND_DONE -eq 0 ] \; then
+        echo Failed to create Frameworks directory in app bundle \;
+        exit 1 \;
+    fi\"
 )
 
-# Copy the framework into the bundle
+# Copy the framework into the app bundle
 add_custom_command(
     TARGET
     ${APP_NAME}
-    POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${PROJECT_BINARY_DIR}/cppframework/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/
-    ${PROJECT_BINARY_DIR}/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/${APP_NAME}.app/Frameworks
+    POST_BUILD COMMAND /bin/sh -c
+    \"COMMAND_DONE=0 \;
+    if ${CMAKE_COMMAND} -E copy_directory
+        ${PROJECT_BINARY_DIR}/cppframework/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/
+        ${PROJECT_BINARY_DIR}/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/${APP_NAME}.app/Frameworks
+        \&\>/dev/null \; then
+        COMMAND_DONE=1 \;
+    fi \;
+    if ${CMAKE_COMMAND} -E copy_directory
+        \${BUILT_PRODUCTS_DIR}/${FRAMEWORK_NAME}.framework
+        \${BUILT_PRODUCTS_DIR}/${APP_NAME}.app/Frameworks/${FRAMEWORK_NAME}.framework
+        \&\>/dev/null \; then
+        COMMAND_DONE=1 \;
+    fi \;
+    if [ \\$$COMMAND_DONE -eq 0 ] \; then
+        echo Failed to copy the framework into the app bundle \;
+        exit 1 \;
+    fi\"
 )
 
 # Codesign the framework in it's new spot
 add_custom_command(
     TARGET
     ${APP_NAME}
-    POST_BUILD COMMAND codesign --force --verbose
-    ${PROJECT_BINARY_DIR}/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/${APP_NAME}.app/Frameworks/${FRAMEWORK_NAME}.framework
-    --sign ${CODE_SIGN_IDENTITY}
+    POST_BUILD COMMAND /bin/sh -c
+    \"COMMAND_DONE=0 \;
+    if codesign --force --verbose
+        ${PROJECT_BINARY_DIR}/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/${APP_NAME}.app/Frameworks/${FRAMEWORK_NAME}.framework
+        --sign ${CODE_SIGN_IDENTITY}
+        \&\>/dev/null \; then
+        COMMAND_DONE=1 \;
+    fi \;
+    if codesign --force --verbose
+        \${BUILT_PRODUCTS_DIR}/${APP_NAME}.app/Frameworks/${FRAMEWORK_NAME}.framework
+        --sign ${CODE_SIGN_IDENTITY}
+        \&\>/dev/null \; then
+        COMMAND_DONE=1 \;
+    fi \;
+    if [ \\$$COMMAND_DONE -eq 0 ] \; then
+        echo Framework codesign failed \;
+        exit 1 \;
+    fi\"
 )
-
