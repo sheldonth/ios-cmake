@@ -35,7 +35,7 @@ The app instantiates a C++ object from the dynamically linked framework and call
 - Run `open build.sim64/project.xcodeproj`
 
 #### iPhone/iPad
-- The app target builds to iPhone device family. To build an iPhone/iPad target, change the value of `XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY` on line 114 of `CMakeLists.txt` to `"1,2"`
+- The app target builds to iPhone device family. To build an iPhone/iPad target, change the value of `DEVICE_FAMILY` on line 12 of `CMakeLists.txt` to `"1,2"`
 
 ### Framework
 - Builds a dynamically linked iOS framework for the architectures relevant to the platform

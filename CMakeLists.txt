@@ -9,6 +9,7 @@ set(FRAMEWORK_BUNDLE_IDENTIFIER "com.company.framework")    # <== Set to your fr
 set(CODE_SIGN_IDENTITY "iPhone Developer")                  # <== Set to your preferred code sign identity, to see list:
                                                             # /usr/bin/env xcrun security find-identity -v -p codesigning
 set(DEPLOYMENT_TARGET 8.0)                                  # <== Set your deployment target version of iOS
+set(DEVICE_FAMILY "1")                                      # <== Set to "1" to target iPhone, set to "2" to target iPad, set to "1,2" to target both
 
 project(${DEVELOPMENT_PROJECT_NAME})
 include(BundleUtilities)
@@ -101,7 +102,8 @@ target_link_libraries(${APP_NAME} ${SYSTEMCONFIGURATION})
 
 # Link the framework to the app
 set_target_properties(${APP_NAME} PROPERTIES
-                      XCODE_ATTRIBUTE_OTHER_LDFLAGS "${XCODE_ATTRIBUTE_OTHER_LDFLAGS} -framework ${FRAMEWORK_NAME}")
+                      XCODE_ATTRIBUTE_OTHER_LDFLAGS "${XCODE_ATTRIBUTE_OTHER_LDFLAGS} -framework ${FRAMEWORK_NAME}"
+)
 
 # Turn on ARC
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fobjc-arc")
@@ -115,8 +117,8 @@ set_target_properties(${APP_NAME} PROPERTIES
                       XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET ${DEPLOYMENT_TARGET}
                       XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY ${CODE_SIGN_IDENTITY}
                       XCODE_ATTRIBUTE_DEVELOPMENT_TEAM ${DEVELOPMENT_TEAM_ID}
+                      XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY ${DEVICE_FAMILY}
                       MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/plist.in
-                      XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1"
                       XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC YES
                       XCODE_ATTRIBUTE_COMBINE_HIDPI_IMAGES "NO"
                       XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)")
