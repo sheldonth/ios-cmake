@@ -2,6 +2,9 @@
 #include <string>
 #include <iostream>
 
+#define EXPORT __attribute__((visibility("default")))
+
+EXPORT
 int Foo::PrintFoo()
 {
 #if __cplusplus

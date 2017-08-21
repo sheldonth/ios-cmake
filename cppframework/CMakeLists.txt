@@ -29,7 +29,7 @@ set_target_properties(${FRAMEWORK_NAME} PROPERTIES
     XCODE_ATTRIBUTE_SKIP_INSTALL "YES"
 )
 
-# set_target_properties(${FRAMEWORK_NAME} PROPERTIES COMPILE_FLAGS "-x c++")
+set_target_properties(${FRAMEWORK_NAME} PROPERTIES COMPILE_FLAGS "-fvisibility=hidden -fvisibility-inlines-hidden")
 
 add_custom_command(
     TARGET ${FRAMEWORK_NAME}
