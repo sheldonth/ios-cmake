@@ -2,17 +2,21 @@ cmake_minimum_required (VERSION 3.7)
 
 set(DEVELOPMENT_PROJECT_NAME "project")                     # <== Set to your project name, e.g. project.xcodeproj
 set(DEVELOPMENT_TEAM_ID "AAAAAAAAAA")                       # <== Set to your team ID from Apple
-set(APP_NAME "YOURAPP")                                     # <== Set To Your app's name
+set(APP_NAME "YOURAPP")                                     # <== Set To your app's name
 set(APP_BUNDLE_IDENTIFIER "com.company.app")                # <== Set to your app's bundle identifier
 set(FRAMEWORK_NAME "FooBar")                                # <== Set to your framework's name
 set(FRAMEWORK_BUNDLE_IDENTIFIER "com.company.framework")    # <== Set to your framework's bundle ID
+set(TEST_NAME "Tests")                                      # <== Set to your test's name
+set(TEST_BUNDLE_IDENTIFIER "com.company.tests")             # <== Set to your tests's bundle ID
 set(CODE_SIGN_IDENTITY "iPhone Developer")                  # <== Set to your preferred code sign identity, to see list:
                                                             # /usr/bin/env xcrun security find-identity -v -p codesigning
 set(DEPLOYMENT_TARGET 8.0)                                  # <== Set your deployment target version of iOS
 set(DEVICE_FAMILY "1")                                      # <== Set to "1" to target iPhone, set to "2" to target iPad, set to "1,2" to target both
+set(LOGIC_ONLY_TESTS 0)                                     # <== Set to 1 if you do not want tests to be hosted by the application, speeds up pure logic tests but you can not run them on real devices
 
 project(${DEVELOPMENT_PROJECT_NAME})
 include(BundleUtilities)
+include(FindXCTest)
 
 set(PRODUCT_NAME ${APP_NAME})
 set(EXECUTABLE_NAME ${APP_NAME})
@@ -86,6 +90,9 @@ add_executable(
 add_subdirectory(cppframework)
 add_dependencies(${APP_NAME} ${FRAMEWORK_NAME})
 
+# Build tests
+add_subdirectory(tests)
+
 # Locate system libraries on iOS
 find_library(UIKIT UIKit)
 find_library(FOUNDATION Foundation)
@@ -120,8 +127,11 @@ set_target_properties(${APP_NAME} PROPERTIES
                       XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY ${DEVICE_FAMILY}
                       MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/plist.in
                       XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC YES
-                      XCODE_ATTRIBUTE_COMBINE_HIDPI_IMAGES "NO"
-                      XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)")
+                      XCODE_ATTRIBUTE_COMBINE_HIDPI_IMAGES NO
+                      XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)"
+                      XCODE_ATTRIBUTE_ENABLE_TESTABILITY YES
+                      XCODE_ATTRIBUTE_GCC_SYMBOLS_PRIVATE_EXTERN YES
+)
 
 # Include framework headers, needed to make "Build" Xcode action work.
 # "Archive" works fine just relying on default search paths as it has different

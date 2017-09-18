@@ -29,6 +29,12 @@ set_target_properties(${FRAMEWORK_NAME} PROPERTIES
     XCODE_ATTRIBUTE_SKIP_INSTALL "YES"
 )
 
+# Symbol visibility setup, COMPILE_FLAGS only affect C++ so for Objective C we
+# have to use XCODE_ATTRIBUTE_OTHER_CFLAGS.
+set_target_properties(${FRAMEWORK_NAME} PROPERTIES
+    COMPILE_FLAGS "-fvisibility=hidden -fvisibility-inlines-hidden"
+    XCODE_ATTRIBUTE_OTHER_CFLAGS "-fvisibility=hidden -fvisibility-inlines-hidden")
+
 # set_target_properties(${FRAMEWORK_NAME} PROPERTIES COMPILE_FLAGS "-x c++")
 
 add_custom_command(
