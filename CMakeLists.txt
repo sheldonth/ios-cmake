@@ -5,7 +5,7 @@ set(DEVELOPMENT_TEAM_ID "AAAAAAAAAA")                       # <== Set to your te
 set(APP_NAME "YOURAPP")                                     # <== Set To your app's name
 set(APP_BUNDLE_IDENTIFIER "com.company.app")                # <== Set to your app's bundle identifier
 set(FRAMEWORK_NAME "FooBar")                                # <== Set to your framework's name
-set(FRAMEWORK_BUNDLE_IDENTIFIER "com.company.framework")    # <== Set to your framework's bundle ID
+set(FRAMEWORK_BUNDLE_IDENTIFIER "com.company.framework")    # <== Set to your framework's bundle identifier (cannot be the same as app bundle identifier)
 set(TEST_NAME "Tests")                                      # <== Set to your test's name
 set(TEST_BUNDLE_IDENTIFIER "com.company.tests")             # <== Set to your tests's bundle ID
 set(CODE_SIGN_IDENTITY "iPhone Developer")                  # <== Set to your preferred code sign identity, to see list:
