@@ -18,6 +18,8 @@ project(${DEVELOPMENT_PROJECT_NAME})
 include(BundleUtilities)
 include(FindXCTest)
 
+message(STATUS XCTestFound:${XCTest_FOUND})
+
 set(PRODUCT_NAME ${APP_NAME})
 set(EXECUTABLE_NAME ${APP_NAME})
 set(MACOSX_BUNDLE_EXECUTABLE_NAME ${APP_NAME})
@@ -221,6 +223,23 @@ add_custom_command(
     fi \;
     if [ \\$$COMMAND_DONE -eq 0 ] \; then
         echo Framework codesign failed \;
+        exit 1 \;
+    fi\"
+)
+
+# Add a "PlugIns" folder as a kludge fix for how the XcTest package generates paths 
+add_custom_command(
+    TARGET
+    ${APP_NAME}
+    POST_BUILD COMMAND /bin/sh -c
+    \"COMMAND_DONE=0 \;
+    if ${CMAKE_COMMAND} -E make_directory
+        ${PROJECT_BINARY_DIR}/\${CONFIGURATION}\${EFFECTIVE_PLATFORM_NAME}/PlugIns
+        \&\>/dev/null \; then
+        COMMAND_DONE=1 \;
+    fi \;
+    if [ \\$$COMMAND_DONE -eq 0 ] \; then
+        echo Failed to create PlugIns directory in EFFECTIVE_PLATFORM_NAME folder. \;
         exit 1 \;
     fi\"
 )
