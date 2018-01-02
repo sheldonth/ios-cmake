@@ -44,3 +44,6 @@ endif(LOGIC_ONLY_TESTS)
 set_target_properties(${TEST_NAME} PROPERTIES
     XCODE_ATTRIBUTE_FRAMEWORK_SEARCH_PATHS "\$(inherited) "
 )
+
+
+
