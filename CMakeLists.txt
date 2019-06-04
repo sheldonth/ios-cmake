@@ -1,18 +1,6 @@
 cmake_minimum_required (VERSION 3.7)
 
-set(DEVELOPMENT_PROJECT_NAME "project")                     # <== Set to your project name, e.g. project.xcodeproj
-set(DEVELOPMENT_TEAM_ID "AAAAAAAAAA")                       # <== Set to your team ID from Apple
-set(APP_NAME "YOURAPP")                                     # <== Set To your app's name
-set(APP_BUNDLE_IDENTIFIER "com.company.app")                # <== Set to your app's bundle identifier
-set(FRAMEWORK_NAME "FooBar")                                # <== Set to your framework's name
-set(FRAMEWORK_BUNDLE_IDENTIFIER "com.company.framework")    # <== Set to your framework's bundle identifier (cannot be the same as app bundle identifier)
-set(TEST_NAME "Tests")                                      # <== Set to your test's name
-set(TEST_BUNDLE_IDENTIFIER "com.company.tests")             # <== Set to your tests's bundle ID
-set(CODE_SIGN_IDENTITY "iPhone Developer")                  # <== Set to your preferred code sign identity, to see list:
-                                                            # /usr/bin/env xcrun security find-identity -v -p codesigning
-set(DEPLOYMENT_TARGET 8.0)                                  # <== Set your deployment target version of iOS
-set(DEVICE_FAMILY "1")                                      # <== Set to "1" to target iPhone, set to "2" to target iPad, set to "1,2" to target both
-set(LOGIC_ONLY_TESTS 0)                                     # <== Set to 1 if you do not want tests to be hosted by the application, speeds up pure logic tests but you can not run them on real devices
+include(version.cmake)
 
 project(${DEVELOPMENT_PROJECT_NAME})
 include(BundleUtilities)
@@ -30,26 +18,26 @@ set(MACOSX_BUNDLE_ICON_FILE "")
 set(MACOSX_BUNDLE_LONG_VERSION_STRING "1.0")
 set(MACOSX_BUNDLE_SHORT_VERSION_STRING "1.0")
 set(MACOSX_BUNDLE_BUNDLE_VERSION "1.0")
-set(MACOSX_BUNDLE_COPYRIGHT "Copyright YOU")
+set(MACOSX_BUNDLE_COPYRIGHT "Copyright ${DEVELOPMENT_NAME}")
 set(MACOSX_DEPLOYMENT_TARGET ${DEPLOYMENT_TARGET})
 
 set(APP_HEADER_FILES
-  ./AppDelegate.h
-  ./ViewController.h
-  ./CppInterface.h
-  ./Prefix.pch
+    ./AppDelegate.h
+    ./ViewController.h
+    ./CppInterface.h
+    ./Prefix.pch
 )
 
 set(APP_SOURCE_FILES
-  ./AppDelegate.m
-  ./ViewController.m
-  ./CppInterface.mm
-  ./main.m
+    ./AppDelegate.m
+    ./ViewController.m
+    ./CppInterface.mm
+    ./main.m
 )
 
 set(RESOURCES
-  ./Main.storyboard
-  ./LaunchScreen.storyboard
+    ./Main.storyboard
+    ./LaunchScreen.storyboard
 )
 
 add_executable(
@@ -69,19 +57,16 @@ add_executable(
   # ${PROJECT_SOURCE_DIR}/Torch.framework
 # )
 
-
 # Include the same headers for the statically linked framework:
 # Include headers to they're available as #import <Header/Header.h> from a framework
 # target_include_directories(${APP_NAME}
   # PUBLIC ${PROJECT_SOURCE_DIR}/Torch.framework/Headers
 # )
 
-
 # Static Link a library archive into the executable
 # target_link_libraries(${APP_NAME} 
 #   ${PROJECT_SOURCE_DIR}/framework/lib/libtorch.a
 # )
-
 
 # Include a source directory outside a framework
 # target_include_directories(${APP_NAME}
